@@ -79,7 +79,7 @@ resource "aws_instance" "inst1" {
     source      = "./deploy/templates/ec2-caller.sh"
     destination = "/home/ubuntu/ec2-caller.sh"
   }
-  
+
   provisioner "remote-exec" {
     inline = [
       "chmod +x /home/ubuntu/ec2-caller.sh",      
@@ -90,7 +90,7 @@ resource "aws_instance" "inst1" {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file("./keys/aws_key_enc")
+    private_key = file("./keys/aws_key_ecc")
     timeout     = "4m"
   }
 }
