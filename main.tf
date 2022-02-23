@@ -79,6 +79,13 @@ resource "aws_instance" "inst1" {
     source      = "./deploy/templates/ec2-caller.sh"
     destination = "/home/ubuntu/ec2-caller.sh"
   }
+  
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /home/ubuntu/ec2-caller.sh",      
+    ]
+  }
+
   connection {
     type        = "ssh"
     host        = self.public_ip
