@@ -8,7 +8,7 @@ sudo apt-get install cron
 chmod +x /home/ubuntu/ec2-caller.sh
 
 crontab<<EOF
-* * * * * /home/ubuntu/ec2-caller.sh
+10,20,30,40,50,00 * * * * /home/ubuntu/ec2-caller.sh
 EOF
 
 
