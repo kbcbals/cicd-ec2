@@ -51,7 +51,7 @@ jobs:
       - run:
           name: Fill out template variables in yaml files
           command: |
-            export CIRCLECI_TOKEN=$(echo ${CIRCLECI_TOKEN})
+            export CIRCLECI_TOKEN=$(echo ${CIRCLECI_TOKEN})            
             envsubst < ./deploy/templates/ec2-caller.sh | sponge ./deploy/templates/ec2-caller.sh            
       - run:
           name: Terraform Validate & Format
