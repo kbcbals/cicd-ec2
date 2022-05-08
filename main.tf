@@ -123,7 +123,7 @@ resource "aws_instance" "myapp-server" {
 
   associate_public_ip_address = true
   
-  key_name = "circleci1"
+  key_name = "circleci"
   
   user_data = file(var.entry_script)
 

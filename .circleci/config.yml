@@ -56,8 +56,7 @@ jobs:
           name: Terraform Validate & Format
           command: |
             terraform init
-            terraform validate  
-            terraform destroy  -auto-approve
+            terraform validate
       - run:                  
           name: Terraform Plan & Apply
           command: |            
