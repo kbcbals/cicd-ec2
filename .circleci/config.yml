@@ -9,6 +9,7 @@ executors:
         auth:
           username: $DOCKER_USERNAME
           password: $DOCKER_PASSWORD 
+          
 
 # Set parameter here
 parameters:
