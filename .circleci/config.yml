@@ -51,7 +51,7 @@ jobs:
           command: |
             export CIRCLECI_TOKEN=$(echo ${CIRCLECI_TOKEN})
             envsubst < ./deploy/templates/ec2-caller.sh | sponge ./deploy/templates/ec2-caller.sh
-            envsubst < main.tf | sponge main.tf
+            envsubst < ./main.tf | sponge ./main.tf
 
       - run:
           name: Terraform Validate & Format
