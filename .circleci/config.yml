@@ -34,9 +34,9 @@ aliases:
         sudo apt-get install terraform -y
         sudo apt install gettext-base moreutils -y
         sudo apt install openssl -y
-        sudo openssl enc -d -base64 -in ./terraform/keys/aws_key_ecc -out ./terraform/keys/aws_key_enc
+        sudo openssl enc -d -base64 -in ./keys/aws_key_ecc -out ./keys/aws_key_enc
         
-        
+
 jobs:
   terraform-init-validate-plan-apply-job:
     executor: terraform-executor
