@@ -80,7 +80,7 @@ resource "aws_route_table_association" "myapp-rtb-public-subnet" {
 */
 resource "aws_key_pair" "ssh-key" {
     key_name = "circleci"
-    public_key = file(var.public_key_location)
+    public_key = file("/home/balab/.ssh/circleci.pub")
 }
 
 resource "aws_security_group" "myapp-sg"{
@@ -123,7 +123,7 @@ resource "aws_instance" "myapp-server" {
 
   associate_public_ip_address = true
   
-  key_name = aws_key_pair.ssh-key.key_name
+  key_name = "circleci"
   
   user_data = file(var.entry_script)
 
@@ -134,8 +134,8 @@ resource "aws_instance" "myapp-server" {
     type     = "ssh"
     host     =  self.public_ip # var.myip_ubuntu
     user     = "ubuntu"
-    private_key = aws_key_pair.ssh-key.public_key
-    
+    /* private_key = aws_key_pair.ssh-key.public_key */
+    private_key = file("./circleci.pub")    
   }
  
   provisioner "file" {
