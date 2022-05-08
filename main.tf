@@ -78,10 +78,10 @@ resource "aws_route_table_association" "myapp-rtb-public-subnet" {
                 ssh keypair
 
 */
-resource "aws_key_pair" "ssh-key" {
+/* resource "aws_key_pair" "ssh-key" {
     key_name = "circleci"
     public_key = file(var.public_key_location)
-}
+} */
 
 resource "aws_security_group" "myapp-sg"{
   name = "myapp_sg"
