@@ -36,6 +36,7 @@ aliases:
         sudo apt install openssl -y
         sudo openssl enc -d -base64 -in ./terraform/keys/aws_key_ecc -out ./terraform/keys/aws_key_enc
         
+        
 jobs:
   terraform-init-validate-plan-apply-job:
     executor: terraform-executor
