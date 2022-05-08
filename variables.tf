@@ -1,13 +1,24 @@
 
-
-variable "profile" {
-  description = "Profile with permissions to provision the AWS resources."
-  default     = "bala"
-}
-variable "user_key" {
-  description = "user key for the SSH"
-  default     = "user_key"  
+variable "regions"{
+  type=list(string)
 }
 
+variable "az"{
+  type = list(string)
+}
 
- 
+variable "cidr_blocks"{
+  type = list(object({
+    cidr_block = string
+    name = string
+  }))
+}
+
+/* variable env_prefix{} */
+
+variable myip_ubuntu{}
+variable instance_type{}
+variable public_key_location{}
+variable key_location{}
+variable entry_script{}
+/* variable entry1_script{} */

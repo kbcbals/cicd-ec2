@@ -33,9 +33,7 @@ aliases:
         sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
         sudo apt-get install terraform -y
         sudo apt install gettext-base moreutils -y
-        sudo dpkg -i ./deploy/binary/sops_3.7.1_amd64.deb        
-        sops --kms $SOPS_KMS_ARN -d ./keys/aws_key_ecc > ./keys/aws_key_enc
-
+        
 jobs:
   terraform-init-validate-plan-apply-job:
     executor: terraform-executor
