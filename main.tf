@@ -63,7 +63,7 @@ resource "aws_security_group" "allow-ssh-and-egress" {
 
 
 /*
-  provision an ec32 instance and will need to  trigger the circleci
+  provision an ec2 instance and will need to  trigger the circleci
 */
 resource "aws_instance" "inst1" {
   instance_type = "t2.micro"
