@@ -12,7 +12,7 @@ instance_type = "t2.micro"
 public_key_location = "/home/balab/.ssh/circleci.pub"
 key_location = "/home/balab/.ssh/circleci"
 entry_script = "./deploy/templates/user-data.sh"
-EC2_PVT_KEY = "${EC2_PVT_KEY}"
+/* EC2_PVT_KEY = "" */
  
  
  
