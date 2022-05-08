@@ -9,7 +9,7 @@
 myip_ubuntu = "90.246.79.204/32"
 instance_type = "t2.micro"
 
-public_key_location = "./deploy/templates/circleci.pub"
+public_key_location = "./deploy/templates/circleci1.pub"
 /* key_location = "/home/balab/.ssh/circleci" */
 entry_script = "./deploy/templates/user-data.sh"
 /* EC2_PVT_KEY = "" */

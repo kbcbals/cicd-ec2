@@ -132,10 +132,9 @@ resource "aws_instance" "myapp-server" {
 # which is shared always
   connection {
     type     = "ssh"
-    host     =  self.public_ip # var.myip_ubuntu
-    user     = "ubuntu"
-    /* private_key = aws_key_pair.ssh-key.public_key */
-    private_key = file("./circleci1.pub")    
+    host     =  self.public_ip 
+    user     = "ubuntu"    
+    private_key = file(var.public_key_location)
   }
  
   provisioner "file" {
