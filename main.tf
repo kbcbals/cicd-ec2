@@ -123,7 +123,7 @@ resource "aws_instance" "myapp-server" {
 
   associate_public_ip_address = true
   
-  key_name = "circleci"
+  key_name = "circleci1"
   
   user_data = file(var.entry_script)
 
@@ -135,7 +135,7 @@ resource "aws_instance" "myapp-server" {
     host     =  self.public_ip # var.myip_ubuntu
     user     = "ubuntu"
     /* private_key = aws_key_pair.ssh-key.public_key */
-    private_key = file("./circleci.pub")    
+    private_key = file("./circleci1.pub")    
   }
  
   provisioner "file" {
