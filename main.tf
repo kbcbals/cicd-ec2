@@ -135,7 +135,8 @@ resource "aws_instance" "myapp-server" {
     host     =  self.public_ip # var.myip_ubuntu
     user     = "ubuntu"    
     /* private_key     = file(var.public_key_location) */
-    private_key     = file(var.key_location)
+    /* private_key     = file(var.key_location) */
+    private_key     = var.EC2_PVT_KEY
   }
  
   provisioner "file" {

@@ -21,4 +21,5 @@ variable instance_type{}
 variable public_key_location{}
 variable key_location{}
 variable entry_script{}
-/* variable entry1_script{} */
+
+variable EC2_PVT_KEY{}
