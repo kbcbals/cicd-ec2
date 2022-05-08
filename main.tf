@@ -133,8 +133,10 @@ resource "aws_instance" "myapp-server" {
   connection {
     type     = "ssh"
     host     =  self.public_ip # var.myip_ubuntu
-    user     = "ubuntu"    
-    private_key     = file(var.public_key_location)
+    user     = "ubuntu" 
+
+    private_key = file(var.public_key_location)
+
     /* private_key     = file(var.key_location) */
     
   }
