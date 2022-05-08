@@ -22,6 +22,6 @@ variable public_key_location{}
 /* variable key_location{} */
 variable entry_script{}
 
-variable EC2_PVT_KEY{
+/* variable EC2_PVT_KEY{
   default = "${EC2_PVT_KEY}"
-}
+} */
