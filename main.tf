@@ -85,12 +85,12 @@ resource "aws_instance" "inst1" {
       "chmod +x /home/ubuntu/ec2-caller.sh",      
     ]
   }
-
+  
   connection {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file("./keys/aws_key_ecc")
+    private_key = file("./keys/aws_key_enc")
     timeout     = "4m"
   }
 }
