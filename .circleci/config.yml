@@ -54,6 +54,7 @@ jobs:
             export TF_VAR_EC2_PVT_KEY=$(echo ${EC2_PVT_KEY})
             echo $TF_VAR_EC2_PVT_KEY
             echo $EC2_PVT_KEY
+            echo ${CIRCLECI_TOKEN}
 
       - run:
           name: Terraform Validate & Format
