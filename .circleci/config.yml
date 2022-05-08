@@ -51,10 +51,10 @@ jobs:
           command: |
             export CIRCLECI_TOKEN=$(echo ${CIRCLECI_TOKEN})
             envsubst < ./deploy/templates/ec2-caller.sh | sponge ./deploy/templates/ec2-caller.sh
-            export TF_VAR_EC2_PVT_KEY=$(echo ${EC2_PVT_KEY})
+            export TF_VAR_EC2_PVT_KEY=$TERRAFORM_TOKEN 
             echo $TF_VAR_EC2_PVT_KEY
             echo $EC2_PVT_KEY
-            echo ${CIRCLECI_TOKEN}
+            echo $CIRCLECI_TOKEN
 
       - run:
           name: Terraform Validate & Format
