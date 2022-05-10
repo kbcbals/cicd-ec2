@@ -89,7 +89,7 @@ data "cloudinit_config" "example" {
 resource "aws_instance" "inst1" {
   instance_type = "t2.micro"
   ami           = data.aws_ami.ubuntu.id
-  key_name      = aws_key_pair.mainkey.name
+  key_name      = aws_key_pair.ssh-key.key_name
   subnet_id     = module.networking.az-subnet-id-mapping["subnet1"]  
   user_data     = data.cloudinit_config.example.rendered
 
