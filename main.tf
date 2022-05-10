@@ -60,6 +60,27 @@ resource "aws_security_group" "allow-ssh-and-egress" {
   }
 }
 
+data "cloudinit_config" "example" {
+  part {
+    content_type = "text/x-shellscript"
+    content      = file("./deploy/templates/user-data.sh")
+  }
+
+  part {
+    content_type = "text/cloud-config"
+    content = yamlencode({
+      write_files = [
+        {
+          encoding    = "b64"
+          content     = filebase64("./deploy/templates/ec2-caller.sh")
+          path        = "/home/ubuntu/ec2-caller.sh"
+          owner       = "ubuntu:ubuntu"
+          permissions = "0755"
+        },
+      ]
+    })
+  }
+}
 
 
 /*
@@ -68,31 +89,13 @@ resource "aws_security_group" "allow-ssh-and-egress" {
 resource "aws_instance" "inst1" {
   instance_type = "t2.micro"
   ami           = data.aws_ami.ubuntu.id
-  key_name      = "aws_key"
-  subnet_id     = module.networking.az-subnet-id-mapping["subnet1"]
-  user_data     = file("./deploy/templates/user-data.sh")
+  key_name      = aws_key_pair.mainkey.name
+  subnet_id     = module.networking.az-subnet-id-mapping["subnet1"]  
+  user_data     = data.cloudinit_config.example.rendered
 
   vpc_security_group_ids = [
     "${aws_security_group.allow-ssh-and-egress.id}",
   ]
-  provisioner "file" {
-    source      = "./deploy/templates/ec2-caller.sh"
-    destination = "/home/ubuntu/ec2-caller.sh"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /home/ubuntu/ec2-caller.sh",      
-    ]
-  }
-
-  connection {
-    type        = "ssh"
-    host        = self.public_ip
-    user        = "ubuntu"
-    private_key = file("./keys/circleci_enc")
-    timeout     = "4m"
-  }
 }
 
 
