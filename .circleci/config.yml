@@ -33,8 +33,7 @@ aliases:
         sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
         sudo apt-get install terraform -y
         sudo apt install gettext-base moreutils -y
-        sudo apt install openssl -y
-        sudo openssl enc -d -base64 -in ./keys/circleci_ecc -out ./keys/circleci_enc
+        sudo apt install openssl -y        
         
 
 jobs:
