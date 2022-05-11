@@ -12,53 +12,90 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-2"
+  region=var.aws_region
+}
+
+// vpc
+resource "aws_vpc" "my-dev-vpc" {
+    cidr_block = var.vpc_cidr_block
+    tags = {
+        Name = "${var.env_prefix}-vpc"
+    }
 }
 
 
-module "networking" {
-  source = "./networking"
-  cidr   = "10.0.0.0/16"
+resource "aws_internet_gateway" "dev_demo_igw" {
+    vpc_id = aws_vpc.my-dev-vpc.id
+    tags = {
+        Name = "${var.env_prefix}-igw"
+    }    
+} 
 
-  az-subnet-mapping = [
-    {
-      name = "subnet1"
-      az   = "eu-west-2a"
-      cidr = "10.0.0.0/24"
-    },
-    {
-      name = "subnet2"
-      az   = "eu-west-2c"
-      cidr = "10.0.1.0/24"
-    },
-  ]
+
+// subnet
+resource "aws_subnet" "my-dev-subnet-1" {
+    vpc_id = aws_vpc.my-dev-vpc.id
+    cidr_block = var.subnet_cidr_block
+    tags = {        
+        Name = "${var.env_prefix}-subnet-1"
+    }
+    availability_zone = var.avail_zone 
 }
 
-# Create a security group 
-resource "aws_security_group" "allow-ssh-and-egress" {
-  name = "main"
 
-  description = "Allows SSH traffic into instances as well as all eggress."
-  vpc_id      = module.networking.vpc-id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "allow_ssh-all"
-  }
+resource "aws_route_table" "dev_demo_route_table"{
+    vpc_id = aws_vpc.my-dev-vpc.id
+    route {
+        cidr_block  = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.dev_demo_igw.id
+    }
+    tags = {
+        Name = "${var.env_prefix}-rtb"
+    }
 }
+
+resource "aws_route_table_association" "a-rtb-subnet" { 
+    subnet_id = aws_subnet.my-dev-subnet-1.id
+    route_table_id = aws_route_table.dev_demo_route_table.id
+}
+
+
+resource "aws_security_group" "my-dev-sg" {
+    name = "my-dev-sg"
+    vpc_id = aws_vpc.my-dev-vpc.id
+
+    ingress{
+        from_port = 22
+        to_port= 22
+        protocol = "tcp"
+        /* cidr_block = ["90.246.23.42/32"] */
+        cidr_blocks = [var.my_ip]
+        
+    }
+
+    ingress{
+        from_port = 8080
+        to_port= 8080
+        protocol = "tcp"        
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    // allow any traffic outside
+    egress{
+        from_port = 0
+        to_port= 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+        prefix_list_ids = []
+    }
+
+    tags = {
+        Name = "${var.env_prefix}-sg"
+    }
+}
+
+
+
 
 data "cloudinit_config" "example" {
   part {
@@ -86,19 +123,34 @@ data "cloudinit_config" "example" {
 /*
   provision an ec2 instance and will need to  trigger the circleci
 */
-resource "aws_instance" "inst1" {
-  instance_type = "t2.micro"
-  ami           = data.aws_ami.ubuntu.id
-  key_name      = aws_key_pair.ssh-key.key_name
-  subnet_id     = module.networking.az-subnet-id-mapping["subnet1"]  
+resource "aws_instance" "myapp_server" { 
+  ami           = data.aws_ami.ubuntu.id  
+  instance_type = var.aws_instance_type 
+      /* key_name = "server-key-pair" */
+  key_name = aws_key_pair.ssh-key.key_name
+  subnet_id = aws_subnet.my-dev-subnet-1.id
+  vpc_security_group_ids = [aws_security_group.my-dev-sg.id]
+  availability_zone = var.avail_zone
+  associate_public_ip_address = true
   user_data     = data.cloudinit_config.example.rendered
-
-  vpc_security_group_ids = [
-    "${aws_security_group.allow-ssh-and-egress.id}",
-  ]
+  tags = {
+        Name = "${var.environment}-ec2"
+  } 
 }
 
 
 
 
 
+output "ec2_public_ip" {
+    value = aws_instance.myapp_server.public_ip
+}
+
+
+output "dev_vpc_id"{
+    value = aws_vpc.my-dev-vpc.id
+}
+
+output "subnet-1-id" {
+    value = aws_subnet.my-dev-subnet-1.id
+}
