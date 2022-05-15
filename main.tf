@@ -125,8 +125,7 @@ data "cloudinit_config" "example" {
 */
 resource "aws_instance" "myapp_server" { 
   ami           = data.aws_ami.ubuntu.id  
-  instance_type = var.aws_instance_type 
-      /* key_name = "server-key-pair" */
+  instance_type = var.aws_instance_type       
   key_name = aws_key_pair.ssh-key.key_name
   subnet_id = aws_subnet.my-dev-subnet-1.id
   vpc_security_group_ids = [aws_security_group.my-dev-sg.id]
@@ -137,9 +136,6 @@ resource "aws_instance" "myapp_server" {
         Name = "${var.environment}-ec2"
   } 
 }
-
-
-
 
 
 output "ec2_public_ip" {
